@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Flex,
   Heading,
@@ -6,12 +7,9 @@ import {
   Button,
   InputGroup,
   Stack,
-  chakra,
   Box,
-  Link,
   Avatar,
   FormControl,
-  FormHelperText,
   InputRightElement,
   FormErrorMessage,
 } from '@chakra-ui/react';
@@ -31,7 +29,7 @@ export const VALIDATION_SCHEMA = Yup.object().shape({
     .max(15, 'Should be less than 15 characters'),
 });
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -57,7 +55,11 @@ const Login = () => {
           },
         })
         .then((res) => {
-          localStorage.setItem('user', JSON.stringify({ ...res.data, id: res.data._id }));
+          localStorage.setItem('user', JSON.stringify(res.data));
+          navigate('/');
+        })
+        .catch((e) => {
+          toast.error(e.response.data.description);
         })
         .finally(() => setIsLoading(false));
     },
@@ -120,9 +122,6 @@ const Login = () => {
                     </Button>
                   </InputRightElement>
                 </InputGroup>
-                <FormHelperText textAlign="right">
-                  <Link>Забули пароль?</Link>
-                </FormHelperText>
               </FormControl>
               <Button
                 isLoading={isLoading}
@@ -132,7 +131,7 @@ const Login = () => {
                 colorScheme="teal"
                 width="full"
               >
-                Авторизуватися
+                Зареєструватися
               </Button>
             </Stack>
           </form>
@@ -140,7 +139,7 @@ const Login = () => {
       </Stack>
       <Box>
         Вже маєте аккаунт?{' '}
-        <Link color="teal.500" href="#">
+        <Link style={{ color: '#319795' }} to="/login">
           Авторизуватися
         </Link>
       </Box>
@@ -148,4 +147,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
